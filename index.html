@@ -326,6 +326,176 @@
           font-size: 1.5rem;
         }
       }
+
+      /* Zoom Controls Styling */
+      .zoom-controls {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+      }
+
+      .zoom-btn {
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(10px);
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .zoom-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        border-color: var(--accent-primary);
+      }
+
+      .zoom-btn:active {
+        transform: translateY(0);
+        transition-duration: 0.1s;
+      }
+
+      /* Enhanced Mobile Responsive Design */
+      @media (max-width: 480px) {
+        .tree-container {
+          width: 98vw !important;
+          height: 60vh !important;
+          margin: 0.5rem auto;
+          border-radius: 1rem !important;
+        }
+
+        .header-container {
+          padding: 1rem 0;
+          margin-bottom: 1rem;
+        }
+
+        .logo-text {
+          font-size: 1.25rem;
+        }
+
+        .subtitle {
+          font-size: 0.875rem;
+        }
+
+        .zoom-controls {
+          top: 5px !important;
+          right: 5px !important;
+          gap: 6px !important;
+        }
+
+        .zoom-btn {
+          width: 35px !important;
+          height: 35px !important;
+          font-size: 14px !important;
+        }
+
+        .sidebar {
+          width: 98vw !important;
+          height: 90vh !important;
+          top: 5vh !important;
+          right: 1vw !important;
+          left: 1vw !important;
+          border-radius: 0.75rem !important;
+        }
+      }
+
+      /* Tablet Responsive Design */
+      @media (min-width: 769px) and (max-width: 1023px) {
+        .tree-container {
+          width: 90vw !important;
+          height: 70vh !important;
+          max-width: 900px;
+        }
+
+        .zoom-controls {
+          top: 8px !important;
+          right: 8px !important;
+        }
+
+        .sidebar {
+          width: 85vw !important;
+          max-width: 600px;
+          height: 80vh !important;
+          top: 10vh !important;
+          right: 7.5vw !important;
+          left: 7.5vw !important;
+        }
+      }
+
+      /* Touch-friendly interactions */
+      @media (hover: none) and (pointer: coarse) {
+        .node-card:hover {
+          transform: none;
+          filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+        }
+
+        .btn:hover {
+          transform: none;
+        }
+
+        .zoom-btn:hover {
+          transform: none;
+          box-shadow: var(--shadow-lg);
+        }
+
+        /* Larger touch targets */
+        .node-card {
+          min-height: 50px;
+        }
+
+        .zoom-btn {
+          min-width: 44px !important;
+          min-height: 44px !important;
+        }
+      }
+
+      /* High DPI displays */
+      @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+        .node-text {
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
+      }
+
+      /* Landscape orientation on mobile */
+      @media (max-width: 768px) and (orientation: landscape) {
+        .tree-container {
+          height: 80vh !important;
+        }
+
+        .header-container {
+          padding: 0.75rem 0;
+          margin-bottom: 0.75rem;
+        }
+
+        .sidebar {
+          height: 95vh !important;
+          top: 2.5vh !important;
+        }
+      }
+
+      /* Accessibility improvements */
+      .zoom-btn:focus {
+        outline: 2px solid var(--accent-primary);
+        outline-offset: 2px;
+      }
+
+      .node-card:focus {
+        outline: 2px solid var(--accent-primary);
+        outline-offset: 2px;
+      }
+
+      /* Reduce motion for accessibility */
+      @media (prefers-reduced-motion: reduce) {
+        .node-card,
+        .zoom-btn,
+        .btn,
+        .sidebar {
+          transition: none;
+        }
+
+        .sidebar {
+          animation: none;
+        }
+      }
     </style>
 </head>
 <body>
@@ -832,18 +1002,169 @@ function saveSOPState(state) {
 
 let sopState = loadSOPState();
 
-// --- D3 rendering ---
-const treeWidth = 1060, treeHeight = 780;
-const svg = d3.select("#tree-container")
-    .append("svg")
-    .attr("width", treeWidth)
-    .attr("height", treeHeight)
-    .append("g")
-    .attr("transform", `translate(120,20)`);
+// --- D3 rendering with responsive design ---
+let treeWidth, treeHeight, svg, zoomBehavior, svgContainer;
+
+function initializeResponsiveTree() {
+    // Calculate responsive dimensions
+    const container = document.getElementById('tree-container');
+    const containerRect = container.getBoundingClientRect();
+    const isMobile = window.innerWidth < 768;
+    const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+    
+    // Set responsive dimensions
+    if (isMobile) {
+        treeWidth = Math.max(window.innerWidth - 40, 350);
+        treeHeight = Math.max(window.innerHeight - 200, 400);
+        container.style.width = '95vw';
+        container.style.height = `${Math.min(treeHeight, window.innerHeight - 160)}px`;
+    } else if (isTablet) {
+        treeWidth = Math.max(window.innerWidth - 80, 700);
+        treeHeight = Math.max(window.innerHeight - 200, 600);
+        container.style.width = '90vw';
+        container.style.height = `${Math.min(treeHeight, window.innerHeight - 120)}px`;
+    } else {
+        treeWidth = 1060;
+        treeHeight = 780;
+        container.style.width = '1100px';
+        container.style.height = '800px';
+    }
+
+    // Clear any existing SVG
+    d3.select("#tree-container").selectAll("*").remove();
+    
+    // Create responsive SVG with zoom capabilities
+    svgContainer = d3.select("#tree-container")
+        .append("svg")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("viewBox", `0 0 ${treeWidth} ${treeHeight}`)
+        .attr("preserveAspectRatio", "xMidYMid meet")
+        .style("background", "transparent");
+    
+    // Add zoom behavior
+    zoomBehavior = d3.zoom()
+        .scaleExtent([0.2, 3])
+        .on("zoom", function(event) {
+            svg.attr("transform", event.transform);
+        });
+    
+    svgContainer.call(zoomBehavior);
+    
+    // Create main SVG group
+    svg = svgContainer.append("g");
+    
+    // Set initial transform with proper centering
+    const initialScale = isMobile ? 0.7 : isTablet ? 0.8 : 1;
+    const centerX = treeWidth * 0.1;
+    const centerY = treeHeight * 0.05;
+    
+    const initialTransform = d3.zoomIdentity
+        .translate(centerX, centerY)
+        .scale(initialScale);
+    
+    svgContainer.call(zoomBehavior.transform, initialTransform);
+    
+    // Add zoom controls for mobile/tablet
+    if (isMobile || isTablet) {
+        addZoomControls();
+    }
+}
+
+function addZoomControls() {
+    const controls = d3.select("#tree-container")
+        .append("div")
+        .attr("class", "zoom-controls")
+        .style("position", "absolute")
+        .style("top", "10px")
+        .style("right", "10px")
+        .style("z-index", "1000")
+        .style("display", "flex")
+        .style("flex-direction", "column")
+        .style("gap", "8px");
+    
+    // Zoom in button
+    controls.append("button")
+        .attr("class", "zoom-btn zoom-in")
+        .style("background", "var(--bg-secondary)")
+        .style("border", "1px solid var(--border-primary)")
+        .style("border-radius", "8px")
+        .style("width", "40px")
+        .style("height", "40px")
+        .style("color", "var(--text-primary)")
+        .style("cursor", "pointer")
+        .style("display", "flex")
+        .style("align-items", "center")
+        .style("justify-content", "center")
+        .style("box-shadow", "var(--shadow-lg)")
+        .html("➕")
+        .on("click", function() {
+            svgContainer.transition().duration(200).call(
+                zoomBehavior.scaleBy, 1.5
+            );
+        });
+    
+    // Zoom out button
+    controls.append("button")
+        .attr("class", "zoom-btn zoom-out")
+        .style("background", "var(--bg-secondary)")
+        .style("border", "1px solid var(--border-primary)")
+        .style("border-radius", "8px")
+        .style("width", "40px")
+        .style("height", "40px")
+        .style("color", "var(--text-primary)")
+        .style("cursor", "pointer")
+        .style("display", "flex")
+        .style("align-items", "center")
+        .style("justify-content", "center")
+        .style("box-shadow", "var(--shadow-lg)")
+        .html("➖")
+        .on("click", function() {
+            svgContainer.transition().duration(200).call(
+                zoomBehavior.scaleBy, 0.67
+            );
+        });
+    
+    // Reset zoom button
+    controls.append("button")
+        .attr("class", "zoom-btn zoom-reset")
+        .style("background", "var(--bg-secondary)")
+        .style("border", "1px solid var(--border-primary)")
+        .style("border-radius", "8px")
+        .style("width", "40px")
+        .style("height", "40px")
+        .style("color", "var(--text-primary)")
+        .style("cursor", "pointer")
+        .style("display", "flex")
+        .style("align-items", "center")
+        .style("justify-content", "center")
+        .style("box-shadow", "var(--shadow-lg)")
+        .html("🏠")
+        .on("click", function() {
+            const isMobile = window.innerWidth < 768;
+            const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+            const initialScale = isMobile ? 0.7 : isTablet ? 0.8 : 1;
+            const centerX = treeWidth * 0.1;
+            const centerY = treeHeight * 0.05;
+            
+            const resetTransform = d3.zoomIdentity
+                .translate(centerX, centerY)
+                .scale(initialScale);
+            
+            svgContainer.transition().duration(500).call(
+                zoomBehavior.transform, resetTransform
+            );
+        });
+}
+
+// Initialize responsive tree
+initializeResponsiveTree();
 
 let duration = 500;
 let root = d3.hierarchy(sopData, d => d.children);
 
+// Set responsive initial positioning
+const isMobile = window.innerWidth < 768;
 root.x0 = treeHeight / 2;
 root.y0 = 0;
 root.children.forEach(collapse);
@@ -861,16 +1182,26 @@ function collapse(d) {
 }
 
 function update(source) {
-    const tree = d3.tree().size([treeHeight - 60, treeWidth - 300]);
+    const isMobile = window.innerWidth < 768;
+    const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+    
+    // Adjust tree layout based on screen size
+    const horizontalSpacing = isMobile ? 180 : isTablet ? 200 : 240;
+    const verticalSize = isMobile ? treeHeight - 100 : treeHeight - 60;
+    const horizontalSize = isMobile ? treeWidth - 150 : treeWidth - 300;
+    
+    const tree = d3.tree().size([verticalSize, horizontalSize]);
     tree(root);
     const nodes = root.descendants();
     const links = root.links();
     
-    // Dynamic spacing based on tree depth and content
-    nodes.forEach(d => { d.y = d.depth * 240; });
+    // Dynamic spacing based on screen size and tree depth
+    nodes.forEach(d => { 
+        d.y = d.depth * horizontalSpacing; 
+    });
     
-    // Collision detection and adjustment
-    adjustForCollisions(nodes);
+    // Enhanced collision detection for mobile
+    adjustForCollisions(nodes, isMobile);
     
     let node = svg.selectAll('g.node')
         .data(nodes, d => d.data.id);
@@ -894,9 +1225,8 @@ function update(source) {
                 selectedNode = null;
                 hideSidebar();
             } else if (d._children) {
-                // Check if expanding would cause severe overlapping
-                if (shouldAutoCollapse(d)) {
-                    // Collapse siblings first to make room
+                // Enhanced auto-collapse for mobile
+                if (shouldAutoCollapse(d, isMobile)) {
                     if (d.parent) {
                         d.parent.children.forEach(sibling => {
                             if (sibling !== d && sibling.children) {
@@ -917,15 +1247,21 @@ function update(source) {
             update(d);
         });
 
-    // Node card with improved styling based on status
+    // Responsive node sizing
+    const nodeWidth = isMobile ? 160 : isTablet ? 170 : 180;
+    const nodeHeight = isMobile ? 45 : 50;
+    const fontSize = isMobile ? 11 : 12;
+    const iconSize = isMobile ? 6 : 8;
+
+    // Node card with responsive sizing
     nodeEnter.append("rect")
         .attr("class", "node-card")
-        .attr("rx", 12)
-        .attr("ry", 12)
-        .attr("x", -90)
-        .attr("y", -25)
-        .attr("width", 180)
-        .attr("height", 50)
+        .attr("rx", isMobile ? 8 : 12)
+        .attr("ry", isMobile ? 8 : 12)
+        .attr("x", -nodeWidth/2)
+        .attr("y", -nodeHeight/2)
+        .attr("width", nodeWidth)
+        .attr("height", nodeHeight)
         .attr("fill", d => {
             const state = getTaskState(d.data.id);
             const status = state.status || d.data.status || 'not-started';
@@ -942,11 +1278,14 @@ function update(source) {
         })
         .attr("stroke-width", 1.5);
 
-    // Task icon - circle positioned to align with text
+    // Responsive task icon positioning
+    const iconX = -nodeWidth/2 + 15;
+    const iconY = isMobile ? -2 : -5;
+    
     nodeEnter.append("circle")
-        .attr("cx", -75)
-        .attr("cy", -5)
-        .attr("r", 8)
+        .attr("cx", iconX)
+        .attr("cy", iconY)
+        .attr("r", iconSize)
         .attr("fill", d => {
             const state = getTaskState(d.data.id);
             const status = state.status || d.data.status || 'not-started';
@@ -955,9 +1294,10 @@ function update(source) {
             return "#6366f1";
         });
 
-    // Check mark properly centered inside the circle - only visible when completed
+    // Responsive check mark positioning
+    const checkSize = isMobile ? 1.5 : 2;
     nodeEnter.append("path")
-        .attr("d", "M-79,-7 L-77,-5 L-71,-9")
+        .attr("d", `M${iconX-4},${iconY-2} L${iconX-2},${iconY} L${iconX+2},${iconY-4}`)
         .attr("stroke", d => {
             const state = getTaskState(d.data.id);
             const status = state.status || d.data.status || 'not-started';
@@ -965,7 +1305,7 @@ function update(source) {
             if (status === 'in-progress') return "#f59e0b";
             return "#ffffff";
         })
-        .attr("stroke-width", 2)
+        .attr("stroke-width", checkSize)
         .attr("fill", "none")
         .attr("stroke-linecap", "round")
         .attr("stroke-linejoin", "round")
@@ -977,24 +1317,25 @@ function update(source) {
             return 0.5;
         });
 
-    // Node text with better positioning and wrapping
+    // Responsive node text
     const textGroups = nodeEnter.append('g')
         .attr('class', 'node-text');
 
     textGroups.each(function(d) {
         const textGroup = d3.select(this);
         const words = d.data.name.split(/\s+/);
-        const lineHeight = 14;
-        const maxWidth = 140;
+        const lineHeight = isMobile ? 12 : 14;
+        const maxWidth = nodeWidth - 40;
         const maxLines = 2;
+        const textStartX = -nodeWidth/2 + 30;
         
         let line = [];
         let lineNumber = 0;
         let tspan = textGroup.append("text")
-            .attr("x", -60)
-            .attr("y", -10)
+            .attr("x", textStartX)
+            .attr("y", isMobile ? -8 : -10)
             .attr('text-anchor', "start")
-            .attr('font-size', 12)
+            .attr('font-size', fontSize)
             .attr('font-weight', 600)
             .attr('fill', d => {
                 const state = getTaskState(d.data.id);
@@ -1015,10 +1356,10 @@ function update(source) {
                 if (lineNumber < maxLines && i < words.length - 1) {
                     line = [word];
                     tspan = textGroup.append("text")
-                        .attr("x", -60)
-                        .attr("y", -10 + (lineNumber * lineHeight))
+                        .attr("x", textStartX)
+                        .attr("y", (isMobile ? -8 : -10) + (lineNumber * lineHeight))
                         .attr('text-anchor', "start")
-                        .attr('font-size', 12)
+                        .attr('font-size', fontSize)
                         .attr('font-weight', 600)
                         .attr('fill', d => {
                             const state = getTaskState(d.data.id);
@@ -1028,10 +1369,10 @@ function update(source) {
                         })
                         .text(word);
                 } else if (lineNumber >= maxLines) {
-                    // Truncate with ellipsis if too many lines
                     const currentText = tspan.text();
-                    if (currentText.length > 15) {
-                        tspan.text(currentText.substring(0, 15) + "...");
+                    const maxLength = isMobile ? 12 : 15;
+                    if (currentText.length > maxLength) {
+                        tspan.text(currentText.substring(0, maxLength) + "...");
                     }
                     return;
                 }
@@ -1109,7 +1450,7 @@ function update(source) {
             return "#f9fafb";
         });
 
-    // -------- LINKS ---------
+    // -------- LINKS with responsive styling ---------
     let link = svg.selectAll('path.link')
         .data(links, d => d.target.data.id);
     
@@ -1129,6 +1470,9 @@ function update(source) {
             return diagonal({ source: o, target: o });
         })
         .style("opacity", 0)
+        .style("stroke", "#6b7280")
+        .style("stroke-width", isMobile ? "1.5px" : "2px")
+        .style("fill", "none")
         .merge(link)
         .transition()
         .duration(duration)
@@ -1145,21 +1489,18 @@ function diagonal(d) {
     return `M${d.source.y},${d.source.x}C${d.source.y + 60},${d.source.x} ${d.target.y - 60},${d.target.x} ${d.target.y},${d.target.x}`;
 }
 
-// Collision detection and node spacing adjustment
-function adjustForCollisions(nodes) {
-    const NODE_HEIGHT = 60; // Node height including padding
-    const MIN_SPACING = 10; // Minimum spacing between nodes
+// Enhanced collision detection with mobile considerations
+function adjustForCollisions(nodes, isMobile = false) {
+    const NODE_HEIGHT = isMobile ? 55 : 60;
+    const MIN_SPACING = isMobile ? 5 : 10;
     
-    // Group nodes by depth level
     const nodesByLevel = d3.group(nodes, d => d.depth);
     
     nodesByLevel.forEach((levelNodes, depth) => {
         if (levelNodes.length <= 1) return;
         
-        // Sort nodes by their current x position
         levelNodes.sort((a, b) => a.x - b.x);
         
-        // Adjust positions to prevent overlaps
         for (let i = 1; i < levelNodes.length; i++) {
             const currentNode = levelNodes[i];
             const prevNode = levelNodes[i - 1];
@@ -1169,7 +1510,6 @@ function adjustForCollisions(nodes) {
             
             if (currentDistance < minDistance) {
                 const adjustment = minDistance - currentDistance;
-                // Adjust current node and all subsequent nodes
                 for (let j = i; j < levelNodes.length; j++) {
                     levelNodes[j].x += adjustment;
                 }
@@ -1178,16 +1518,18 @@ function adjustForCollisions(nodes) {
     });
 }
 
-// Auto-collapse nodes if expansion would cause severe overlapping
-function shouldAutoCollapse(node) {
+// Enhanced auto-collapse with mobile considerations
+function shouldAutoCollapse(node, isMobile = false) {
     if (!node.children || node.children.length === 0) return false;
     
-    // Calculate how many nodes would be visible if expanded
     const visibleDescendants = countVisibleDescendants(node);
-    const availableHeight = treeHeight - 80; // Reserve space for padding
-    const requiredHeight = visibleDescendants * 70; // Estimated height per node
+    const availableHeight = treeHeight - (isMobile ? 120 : 80);
+    const nodeHeight = isMobile ? 60 : 70;
+    const requiredHeight = visibleDescendants * nodeHeight;
     
-    return requiredHeight > availableHeight;
+    // More aggressive auto-collapse on mobile
+    const threshold = isMobile ? 0.7 : 0.8;
+    return requiredHeight > (availableHeight * threshold);
 }
 
 function countVisibleDescendants(node) {
@@ -1417,24 +1759,46 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// Responsive handling
+// Enhanced responsive handling
+let resizeTimeout;
 window.addEventListener('resize', function() {
-    const container = document.getElementById('tree-container');
-    if (window.innerWidth < 768) {
-        container.style.width = '95vw';
-        container.style.height = '500px';
-    } else {
-        container.style.width = '1100px';
-        container.style.height = '800px';
-    }
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function() {
+        initializeResponsiveTree();
+        update(root);
+    }, 250);
 });
 
-window.onload = function() {
-    document.getElementById('tree-container').scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'center', 
-        inline: 'center' 
+// Enhanced mobile touch handling
+if ('ontouchstart' in window) {
+    // Prevent double-tap zoom on mobile
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (event) {
+        const now = (new Date()).getTime();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
+    
+    // Add touch-friendly interaction hints
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('tree-container');
+        if (container && window.innerWidth < 768) {
+            container.style.touchAction = 'manipulation';
+        }
     });
+}
+
+window.onload = function() {
+    const container = document.getElementById('tree-container');
+    if (container) {
+        container.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center', 
+            inline: 'center' 
+        });
+    }
 };
 </script>
 </body>
