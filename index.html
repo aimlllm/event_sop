@@ -639,48 +639,6 @@
         font-size: 16px;
         pointer-events: none;
       }
-
-      /* Color Legend Responsive Styling */
-      .color-legend {
-        transition: transform 0.3s ease;
-      }
-
-      .color-legend:hover {
-        transform: translateY(-2px);
-      }
-
-      @media (max-width: 768px) {
-        .color-legend {
-          top: 60px !important;
-          left: 10px !important;
-          max-width: 200px !important;
-          font-size: 11px !important;
-        }
-
-        .color-legend h3 {
-          font-size: 12px !important;
-          margin-bottom: 8px !important;
-        }
-
-        .color-legend .space-y-2 {
-          gap: 4px !important;
-        }
-
-        .color-legend .w-4 {
-          width: 12px !important;
-          height: 12px !important;
-        }
-      }
-
-      @media (max-width: 480px) {
-        .color-legend {
-          top: 50px !important;
-          left: 5px !important;
-          right: 5px !important;
-          max-width: none !important;
-          padding: 12px !important;
-        }
-      }
     </style>
 </head>
 <body>
@@ -699,49 +657,6 @@
 
   <div class="tree-wrapper">
     <div id="tree-container" class="tree-container" style="width: 1100px; height: 800px;">
-    </div>
-    
-    <!-- Hierarchical Color Legend -->
-    <div class="color-legend fixed top-4 left-4 z-40 bg-gray-800/90 backdrop-blur-sm border border-gray-600 rounded-xl p-4 max-w-xs">
-      <h3 class="text-sm font-semibold text-white mb-3 flex items-center gap-2">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M8 12l2 2 4-4"/>
-        </svg>
-        Hierarchy Colors
-      </h3>
-      <div class="space-y-2 text-xs">
-        <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-gradient-to-r from-indigo-500 to-purple-600"></div>
-          <span class="text-gray-200">Root Level</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-gradient-to-r from-blue-500 to-cyan-500"></div>
-          <span class="text-gray-200">Main Categories</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-gradient-to-r from-green-500 to-emerald-400"></div>
-          <span class="text-gray-200">Sub-tasks</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-gradient-to-r from-yellow-500 to-yellow-400"></div>
-          <span class="text-gray-200">Detail Items</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="w-4 h-4 rounded bg-gradient-to-r from-red-500 to-red-400"></div>
-          <span class="text-gray-200">Nested Items</span>
-        </div>
-        <div class="border-t border-gray-600 pt-2 mt-3">
-          <div class="flex items-center gap-2">
-            <div class="w-4 h-4 rounded bg-green-500"></div>
-            <span class="text-gray-200">Completed</span>
-          </div>
-          <div class="flex items-center gap-2 mt-1">
-            <div class="w-4 h-4 rounded bg-yellow-500"></div>
-            <span class="text-gray-200">In Progress</span>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -1547,27 +1462,33 @@ function update(source) {
         
         let line = [];
         let lineNumber = 0;
-        let tspan = textGroup.append("text")
+        let currentTspan = textGroup.append("text")
             .attr("x", textStartX)
             .attr("y", isMobile ? -8 : -10)
             .attr('text-anchor', "start")
             .attr('font-size', fontSize)
             .attr('font-weight', 600)
             .attr('fill', "rgba(255, 255, 255, 0.95)")
-            .style("text-shadow", "0 1px 2px rgba(0, 0, 0, 0.5)") // Enhanced readability
+            .style("text-shadow", "0 1px 2px rgba(0, 0, 0, 0.5)");
         
-        words.forEach((word, i) => {
+        let allTextProcessed = false;
+        
+        for (let i = 0; i < words.length && !allTextProcessed; i++) {
+            const word = words[i];
             line.push(word);
-            tspan.text(line.join(" "));
+            currentTspan.text(line.join(" "));
             
-            if (tspan.node().getComputedTextLength() > maxWidth && line.length > 1) {
+            // Check if current line exceeds width
+            if (currentTspan.node().getComputedTextLength() > maxWidth && line.length > 1) {
+                // Remove the word that caused overflow
                 line.pop();
-                tspan.text(line.join(" "));
+                currentTspan.text(line.join(" "));
                 lineNumber++;
                 
-                if (lineNumber < maxLines && i < words.length - 1) {
+                // Check if we can create another line
+                if (lineNumber < maxLines) {
                     line = [word];
-                    tspan = textGroup.append("text")
+                    currentTspan = textGroup.append("text")
                         .attr("x", textStartX)
                         .attr("y", (isMobile ? -8 : -10) + (lineNumber * lineHeight))
                         .attr('text-anchor', "start")
@@ -1580,16 +1501,48 @@ function update(source) {
                             return "#f9fafb";
                         })
                         .text(word);
-                } else if (lineNumber >= maxLines) {
-                    const currentText = tspan.text();
-                    const maxLength = isMobile ? 12 : 15;
-                    if (currentText.length > maxLength) {
-                        tspan.text(currentText.substring(0, maxLength) + "...");
+                } else {
+                    // We've reached max lines, need to fit remaining words or truncate
+                    const remainingWords = words.slice(i);
+                    let remainingText = remainingWords.join(" ");
+                    
+                    // Try to fit as many remaining words as possible
+                    let testText = "";
+                    let wordsToFit = 0;
+                    
+                    for (let j = 0; j < remainingWords.length; j++) {
+                        const testPhrase = j === 0 ? remainingWords[j] : testText + " " + remainingWords[j];
+                        currentTspan.text(testPhrase);
+                        
+                        if (currentTspan.node().getComputedTextLength() <= maxWidth) {
+                            testText = testPhrase;
+                            wordsToFit = j + 1;
+                        } else {
+                            break;
+                        }
                     }
-                    return;
+                    
+                    // If we couldn't fit all remaining words, add ellipsis
+                    if (wordsToFit < remainingWords.length) {
+                        // Try to fit text with ellipsis
+                        let ellipsisText = remainingWords.slice(0, wordsToFit).join(" ") + "...";
+                        currentTspan.text(ellipsisText);
+                        
+                        // If even with ellipsis it's too long, reduce words
+                        while (currentTspan.node().getComputedTextLength() > maxWidth && wordsToFit > 0) {
+                            wordsToFit--;
+                            ellipsisText = remainingWords.slice(0, wordsToFit).join(" ") + "...";
+                            currentTspan.text(ellipsisText);
+                        }
+                    } else {
+                        // All remaining words fit
+                        currentTspan.text(testText);
+                    }
+                    
+                    allTextProcessed = true;
                 }
             }
-        });
+        }
     });
 
     let nodeUpdate = nodeEnter.merge(node);
