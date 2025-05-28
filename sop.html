@@ -359,62 +359,456 @@ const sopData = {
     "name": "Event Hosting SOP",
     "children": [
         {
-            "name": "Event Planning",
+            "name": "Event Planning (4-6 weeks before)",
             "children": [
-                { "name": "Event Name", "description": "Define the event name and branding", "materials": "Brand guidelines, naming conventions", "role": "Marketing Lead" },
-                { "name": "Date & Time", "description": "Set event date, time, and duration", "materials": "Calendar, timezone considerations", "role": "Event Manager" },
-                { "name": "Format", "description": "Choose format: In-person, Hybrid, or Virtual", "materials": "Platform requirements, venue needs", "role": "Event Manager" },
-                { "name": "Speakers/Guests", "description": "Identify and confirm keynote speakers, panelists, and special guests", "materials": "Speaker database, contracts", "role": "Content Manager" },
-                { "name": "Agenda", "description": "Create detailed event agenda and timeline", "materials": "Template, timing guidelines", "role": "Content Manager" },
-                { "name": "Target Audience", "description": "Define target audience and attendee personas", "materials": "Audience research, demographics", "role": "Marketing Lead" },
-                { "name": "Expected Attendance", "description": "Estimate attendance numbers for planning", "materials": "Historical data, market analysis", "role": "Event Manager" }
+                { 
+                    "name": "Event Concept & Goals", 
+                    "description": "Define event purpose, objectives, and success metrics", 
+                    "materials": "Goals worksheet, KPI tracking sheet", 
+                    "role": "", 
+                    "timeline": "6 weeks before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Date & Time Selection", 
+                    "description": "Choose optimal date and time considering target audience availability", 
+                    "materials": "Calendar analysis, timezone research, competitor events check", 
+                    "role": "", 
+                    "timeline": "6 weeks before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Venue/Platform Selection", 
+                    "description": "Select venue for in-person or platform for virtual/hybrid events", 
+                    "materials": "Venue contracts, platform subscriptions, capacity requirements", 
+                    "role": "", 
+                    "timeline": "5-6 weeks before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Budget Planning", 
+                    "description": "Create detailed budget including all costs and contingency", 
+                    "materials": "Budget template, cost estimates, approval forms", 
+                    "role": "", 
+                    "timeline": "5 weeks before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Speaker/Guest Identification", 
+                    "description": "Research and create list of potential keynote speakers and panelists", 
+                    "materials": "Speaker database, biography templates, contact information", 
+                    "role": "", 
+                    "timeline": "5 weeks before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Initial Speaker Outreach", 
+                    "description": "Send initial invitations to speakers with event details", 
+                    "materials": "Speaker invitation templates, event brief, fee structure", 
+                    "role": "", 
+                    "timeline": "4-5 weeks before",
+                    "status": "not-started"
+                }
             ]
         },
         {
-            "name": "Marketing & Promotion",
+            "name": "Marketing & Promotion (3-4 weeks before)",
             "children": [
-                { "name": "Poster Design & Prep", "description": "Design event poster with QR code for registration", "materials": "Design tools, brand assets, QR generator", "role": "Design Team" },
-                { "name": "Newsletter & Social Media Content", "description": "Create newsletter and social media promotional content", "materials": "Content calendar, copy templates", "role": "Marketing Team" },
-                { "name": "Social Media Distribution", "description": "Distribute across Luma, Eventbrite, WeChat, LinkedIn", "materials": "Platform accounts, scheduling tools", "role": "Marketing Team" }
+                { 
+                    "name": "Event Branding & Design", 
+                    "description": "Create visual identity, logo, and design assets for the event", 
+                    "materials": "Brand guidelines, design software, asset library", 
+                    "role": "", 
+                    "timeline": "4 weeks before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Registration Platform Setup", 
+                    "description": "Configure registration system with forms, payment processing, and confirmation emails", 
+                    "materials": "Platform subscription, payment gateway, form templates", 
+                    "role": "", 
+                    "timeline": "3-4 weeks before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Landing Page Creation", 
+                    "description": "Build event website/landing page with all essential information", 
+                    "materials": "Web hosting, content copy, images, registration integration", 
+                    "role": "", 
+                    "timeline": "3 weeks before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Content Creation", 
+                    "description": "Develop promotional content for various channels", 
+                    "materials": "Content calendar, copywriting templates, visual assets", 
+                    "role": "", 
+                    "timeline": "3 weeks before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Email Campaign Setup", 
+                    "description": "Create email sequences for promotion and follow-ups", 
+                    "materials": "Email templates, segmentation lists, automation rules", 
+                    "role": "", 
+                    "timeline": "3 weeks before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Social Media Campaign Launch", 
+                    "description": "Begin promoting across LinkedIn, Twitter, Instagram, Facebook", 
+                    "materials": "Social media accounts, content calendar, scheduling tools", 
+                    "role": "", 
+                    "timeline": "3 weeks before",
+                    "status": "not-started"
+                }
             ]
         },
         {
-            "name": "Event Logistics",
+            "name": "Email Notifications & Communications",
             "children": [
-                { "name": "Speaker Coordination", "description": "Confirm schedules, collect slides and speaker bios", "materials": "Speaker kit, technical requirements", "role": "Content Manager" },
-                { "name": "Calendar Invites", "description": "Send calendar invites to team members and guests", "materials": "Calendar system, contact lists", "role": "Event Coordinator" },
-                { "name": "Registration Management", "description": "Handle attendee sign-ups and confirmations", "materials": "Registration platform, CRM system", "role": "Event Coordinator" },
-                { "name": "Q&A Preparation", "description": "Curate questions and prepare Q&A format", "materials": "Question bank, moderation guidelines", "role": "Content Manager" }
+                {
+                    "name": "Initial Promotion Email",
+                    "description": "Send first announcement email to mailing list and potential attendees",
+                    "materials": "Email template, recipient list, event details, registration link",
+                    "role": "",
+                    "timeline": "3 weeks before event",
+                    "status": "not-started",
+                    "emailDetails": {
+                        "subject": "Join us for [Event Name] - Registration Now Open!",
+                        "content": "Event announcement with key details, speakers, agenda highlights, and registration CTA",
+                        "audience": "Full mailing list, past attendees, target audience segments"
+                    }
+                },
+                {
+                    "name": "First Follow-up Email",
+                    "description": "Send reminder email with additional event details and early bird offers",
+                    "materials": "Follow-up template, updated agenda, special offers",
+                    "role": "",
+                    "timeline": "2 weeks before event",
+                    "status": "not-started",
+                    "emailDetails": {
+                        "subject": "Don't Miss Out: [Event Name] - Early Bird Pricing Ends Soon",
+                        "content": "Reminder with agenda details, speaker bios, early bird deadline, social proof",
+                        "audience": "Non-registered contacts, partially engaged prospects"
+                    }
+                },
+                {
+                    "name": "Final Registration Reminder",
+                    "description": "Last chance email for registration before cutoff",
+                    "materials": "Urgency-focused template, final agenda, testimonials",
+                    "role": "",
+                    "timeline": "1 week before event",
+                    "status": "not-started",
+                    "emailDetails": {
+                        "subject": "Last Chance: Register for [Event Name] - Closing Soon!",
+                        "content": "Final registration call with urgency, limited spots, full agenda",
+                        "audience": "Non-registered warm prospects, newsletter subscribers"
+                    }
+                },
+                {
+                    "name": "Pre-Event Details Email",
+                    "description": "Send comprehensive event details to registered attendees",
+                    "materials": "Event guide template, logistical details, preparation materials",
+                    "role": "",
+                    "timeline": "2-3 days before event",
+                    "status": "not-started",
+                    "emailDetails": {
+                        "subject": "You're All Set for [Event Name] - Important Event Details Inside",
+                        "content": "Complete event guide: agenda, speaker info, venue/platform details, what to expect",
+                        "audience": "Confirmed registered attendees only"
+                    }
+                },
+                {
+                    "name": "Day-Before Reminder",
+                    "description": "Final reminder email with last-minute details and preparation tips",
+                    "materials": "Reminder template, technical requirements, contact information",
+                    "role": "",
+                    "timeline": "1 day before event",
+                    "status": "not-started",
+                    "emailDetails": {
+                        "subject": "Tomorrow is the Day! Final Reminders for [Event Name]",
+                        "content": "Final reminder with time, tech check info, what to bring, contact details",
+                        "audience": "All registered attendees"
+                    }
+                },
+                {
+                    "name": "Event Day Morning Email",
+                    "description": "Morning-of email with final logistics and last-minute updates",
+                    "materials": "Day-of template, any last-minute changes, technical support info",
+                    "role": "",
+                    "timeline": "Morning of event (2-3 hours before)",
+                    "status": "not-started",
+                    "emailDetails": {
+                        "subject": "Today's the Day! [Event Name] Starts in [X] Hours",
+                        "content": "Final logistics, parking/platform info, emergency contacts, excitement building",
+                        "audience": "All registered attendees"
+                    }
+                },
+                {
+                    "name": "1-Hour Before Alert",
+                    "description": "Send urgent reminder 1 hour before event start",
+                    "materials": "Alert template, direct access links, support contact",
+                    "role": "",
+                    "timeline": "1 hour before event",
+                    "status": "not-started",
+                    "emailDetails": {
+                        "subject": "Starting in 1 Hour: [Event Name] - Join Now!",
+                        "content": "Urgent reminder with direct access links, tech support, last-minute prep",
+                        "audience": "All registered attendees"
+                    }
+                },
+                {
+                    "name": "Immediate Post-Event Thank You",
+                    "description": "Send thank you email immediately after event ends",
+                    "materials": "Thank you template, feedback survey link, next steps",
+                    "role": "",
+                    "timeline": "Within 2 hours after event",
+                    "status": "not-started",
+                    "emailDetails": {
+                        "subject": "Thank You for Attending [Event Name]! Your Feedback Matters",
+                        "content": "Gratitude message, feedback survey, resource links, upcoming events teaser",
+                        "audience": "Event attendees (tracked)"
+                    }
+                },
+                {
+                    "name": "Resource Follow-up Email",
+                    "description": "Send comprehensive follow-up with recordings, slides, and additional resources",
+                    "materials": "Resource compilation, recording links, presentation slides, recommended reading",
+                    "role": "",
+                    "timeline": "1-2 days after event",
+                    "status": "not-started",
+                    "emailDetails": {
+                        "subject": "Your [Event Name] Resources Are Ready + Recording Available",
+                        "content": "Event recording, presenter slides, additional resources, networking contacts",
+                        "audience": "All registered attendees (both attended and no-shows)"
+                    }
+                },
+                {
+                    "name": "Long-term Follow-up",
+                    "description": "Send follow-up email with impact metrics and future opportunities",
+                    "materials": "Impact summary, case studies, upcoming events, community invites",
+                    "role": "",
+                    "timeline": "1 week after event",
+                    "status": "not-started",
+                    "emailDetails": {
+                        "subject": "The Impact of [Event Name] + What's Next",
+                        "content": "Event impact metrics, success stories, upcoming events, community joining options",
+                        "audience": "All attendees and engaged prospects"
+                    }
+                }
             ]
         },
         {
-            "name": "On-Site Preparation",
+            "name": "Speaker & Content Management (2-3 weeks before)",
             "children": [
-                { "name": "Materials", "description": "Prepare name tags, check-in lists, and catering arrangements", "materials": "Name tags, Check-in lists, Catering menu", "role": "Event Coordinator" },
-                { "name": "Media & Tech", "description": "Prepare slide deck, microphones, projector, and backup equipment", "materials": "Presentation deck, Microphones, Projector, Backup devices", "role": "Tech Team" }
+                { 
+                    "name": "Speaker Confirmation & Contracts", 
+                    "description": "Finalize all speaker agreements and contracts", 
+                    "materials": "Speaker contracts, payment terms, technical requirements", 
+                    "role": "", 
+                    "timeline": "3 weeks before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Content Collection", 
+                    "description": "Collect presentations, bios, headshots, and technical requirements", 
+                    "materials": "Content templates, asset collection forms, technical specs", 
+                    "role": "", 
+                    "timeline": "2 weeks before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Tech Rehearsals", 
+                    "description": "Conduct technical rehearsals with all speakers", 
+                    "materials": "Platform access, test scripts, technical checklist", 
+                    "role": "", 
+                    "timeline": "1 week before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Final Content Review", 
+                    "description": "Review all presentations and ensure brand compliance", 
+                    "materials": "Brand guidelines, content review checklist, approval process", 
+                    "role": "", 
+                    "timeline": "3-5 days before",
+                    "status": "not-started"
+                }
             ]
         },
         {
-            "name": "Event Execution",
+            "name": "Pre-Event Logistics (1-2 weeks before)",
             "children": [
-                { "name": "Venue Setup", "description": "Arrange tables, signage, branding, and seating", "materials": "Furniture, signage, brand materials", "role": "Setup Team" },
-                { "name": "Check-in Station Setup", "description": "Set up attendee and speaker check-in stations", "materials": "Check-in tablets, name tags, welcome packets", "role": "Event Coordinator" },
-                { "name": "Food & Beverage Setup", "description": "Arrange food and beverage service", "materials": "Catering supplies, serving equipment", "role": "Catering Team" },
-                { "name": "Tech Setup", "description": "Configure projector, microphones, and recording equipment", "materials": "AV equipment, cables, backup devices", "role": "Tech Team" },
-                { "name": "Photo/Video Coverage", "description": "Document event with photography and videography", "materials": "Cameras, lighting, recording equipment", "role": "Media Team" },
-                { "name": "Run-of-Show Timeline", "description": "Execute detailed timeline with assigned responsibilities", "materials": "Timeline document, communication devices", "role": "Event Manager" }
+                { 
+                    "name": "Registration List Management", 
+                    "description": "Monitor and manage attendee registrations and communications", 
+                    "materials": "Registration platform, attendee database, communication templates", 
+                    "role": "", 
+                    "timeline": "Ongoing until event",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Catering & Venue Setup Planning", 
+                    "description": "Finalize catering orders and venue setup requirements", 
+                    "materials": "Catering contracts, venue floor plans, setup schedules", 
+                    "role": "", 
+                    "timeline": "1-2 weeks before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Technology Setup & Testing", 
+                    "description": "Set up and test all technical equipment and platforms", 
+                    "materials": "AV equipment, platform subscriptions, backup plans", 
+                    "role": "", 
+                    "timeline": "1 week before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Staff Briefing & Role Assignment", 
+                    "description": "Brief all team members on their roles and responsibilities", 
+                    "materials": "Role descriptions, contact lists, emergency procedures", 
+                    "role": "", 
+                    "timeline": "2-3 days before",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Materials Preparation", 
+                    "description": "Prepare name tags, welcome packets, signage, and giveaways", 
+                    "materials": "Attendee lists, printing services, promotional materials", 
+                    "role": "", 
+                    "timeline": "2-3 days before",
+                    "status": "not-started"
+                }
             ]
         },
         {
-            "name": "Post-Event",
+            "name": "Event Day Execution",
             "children": [
-                { "name": "Internal recap and debrief", "description": "Conduct team retrospective meeting", "materials": "Meeting notes, feedback forms", "role": "Event Manager" },
-                { "name": "Upload video to YouTube", "description": "Edit and publish event recordings", "materials": "Video files, editing software, YouTube account", "role": "Media Team" },
-                { "name": "Speaker/guest thank-you notes", "description": "Send personalized thank-you messages", "materials": "Contact information, message templates", "role": "Event Manager" },
-                { "name": "Attendee thank-you email", "description": "Send follow-up emails with resources", "materials": "Email templates, resource links", "role": "Marketing Team" },
-                { "name": "Feedback survey", "description": "Collect and analyze attendee feedback", "materials": "Survey platform, analysis tools", "role": "Event Coordinator" },
-                { "name": "Attendee vs. registration analysis", "description": "Compare actual attendance to registrations", "materials": "Registration data, attendance records", "role": "Event Coordinator" },
-                { "name": "Social media stats", "description": "Compile event reach and engagement metrics", "materials": "Analytics tools, reporting templates", "role": "Marketing Team" }
+                { 
+                    "name": "Early Setup & Venue Preparation", 
+                    "description": "Arrive early for complete venue setup and final checks", 
+                    "materials": "Setup checklist, vendor contact list, emergency supplies", 
+                    "role": "", 
+                    "timeline": "2-3 hours before start",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Registration & Check-in Setup", 
+                    "description": "Set up registration desk with materials and staff", 
+                    "materials": "Check-in tablets, name tags, welcome packets, staff assignments", 
+                    "role": "", 
+                    "timeline": "1-2 hours before start",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Final Technical Checks", 
+                    "description": "Complete final testing of all AV equipment and platforms", 
+                    "materials": "Technical checklist, backup equipment, support contacts", 
+                    "role": "", 
+                    "timeline": "1 hour before start",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Speaker Green Room Management", 
+                    "description": "Manage speaker preparation area and final briefings", 
+                    "materials": "Green room setup, refreshments, final schedules", 
+                    "role": "", 
+                    "timeline": "30 minutes before start",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Event Execution & Monitoring", 
+                    "description": "Execute event according to timeline and monitor all aspects", 
+                    "materials": "Run-of-show document, communication devices, troubleshooting guides", 
+                    "role": "", 
+                    "timeline": "During event",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Live Social Media Coverage", 
+                    "description": "Document event with live social media updates and content", 
+                    "materials": "Social media accounts, content templates, photography equipment", 
+                    "role": "", 
+                    "timeline": "During event",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Event Photography & Recording", 
+                    "description": "Capture high-quality photos and recordings for future use", 
+                    "materials": "Professional cameras, recording equipment, backup storage", 
+                    "role": "", 
+                    "timeline": "During event",
+                    "status": "not-started"
+                }
+            ]
+        },
+        {
+            "name": "Post-Event Activities (1-2 weeks after)",
+            "children": [
+                { 
+                    "name": "Immediate Cleanup & Breakdown", 
+                    "description": "Clean up venue and pack up all materials and equipment", 
+                    "materials": "Cleanup supplies, packing materials, transport arrangements", 
+                    "role": "", 
+                    "timeline": "Immediately after event",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Feedback Survey Distribution", 
+                    "description": "Send detailed feedback surveys to all attendees", 
+                    "materials": "Survey platform, question templates, response tracking", 
+                    "role": "", 
+                    "timeline": "Within 24 hours",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Content Processing & Editing", 
+                    "description": "Edit recordings, process photos, and prepare content for distribution", 
+                    "materials": "Video editing software, photo editing tools, content templates", 
+                    "role": "", 
+                    "timeline": "1-3 days after",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Speaker Thank You & Follow-up", 
+                    "description": "Send personalized thank you notes and any promised materials to speakers", 
+                    "materials": "Thank you templates, speaker contact list, promised deliverables", 
+                    "role": "", 
+                    "timeline": "1-2 days after",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Financial Reconciliation", 
+                    "description": "Process all payments, reconcile expenses, and close out budget", 
+                    "materials": "Expense receipts, payment records, budget tracking sheets", 
+                    "role": "", 
+                    "timeline": "3-5 days after",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Analytics & ROI Analysis", 
+                    "description": "Analyze attendance data, engagement metrics, and calculate ROI", 
+                    "materials": "Analytics tools, registration data, feedback responses, cost analysis", 
+                    "role": "", 
+                    "timeline": "1 week after",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Final Report & Documentation", 
+                    "description": "Create comprehensive event report with insights and recommendations", 
+                    "materials": "Report template, all collected data, photos, learnings documentation", 
+                    "role": "", 
+                    "timeline": "1-2 weeks after",
+                    "status": "not-started"
+                },
+                { 
+                    "name": "Team Debrief & Lessons Learned", 
+                    "description": "Conduct team retrospective to capture learnings and improvements", 
+                    "materials": "Debrief template, team feedback forms, improvement action items", 
+                    "role": "", 
+                    "timeline": "1-2 weeks after",
+                    "status": "not-started"
+                }
             ]
         }
     ]
@@ -523,7 +917,7 @@ function update(source) {
             update(d);
         });
 
-    // Node card with improved styling
+    // Node card with improved styling based on status
     nodeEnter.append("rect")
         .attr("class", "node-card")
         .attr("rx", 12)
@@ -532,26 +926,56 @@ function update(source) {
         .attr("y", -25)
         .attr("width", 180)
         .attr("height", 50)
-        .attr("fill", d => getTaskState(d.data.id).done ? "#10b981" : "#374151")
-        .attr("stroke", d => getTaskState(d.data.id).done ? "#10b981" : "#6b7280")
+        .attr("fill", d => {
+            const state = getTaskState(d.data.id);
+            const status = state.status || d.data.status || 'not-started';
+            if (status === 'completed' || state.done) return "#10b981";
+            if (status === 'in-progress') return "#f59e0b";
+            return "#374151";
+        })
+        .attr("stroke", d => {
+            const state = getTaskState(d.data.id);
+            const status = state.status || d.data.status || 'not-started';
+            if (status === 'completed' || state.done) return "#10b981";
+            if (status === 'in-progress') return "#f59e0b";
+            return "#6b7280";
+        })
         .attr("stroke-width", 1.5);
 
-    // Task icon
+    // Task icon - circle positioned to align with text
     nodeEnter.append("circle")
-        .attr("cx", -70)
-        .attr("cy", 0)
+        .attr("cx", -75)
+        .attr("cy", -5)
         .attr("r", 8)
-        .attr("fill", d => getTaskState(d.data.id).done ? "#10b981" : "#6366f1");
+        .attr("fill", d => {
+            const state = getTaskState(d.data.id);
+            const status = state.status || d.data.status || 'not-started';
+            if (status === 'completed' || state.done) return "#ffffff";
+            if (status === 'in-progress') return "#ffffff";
+            return "#6366f1";
+        });
 
-    // Check mark inside the circle
+    // Check mark properly centered inside the circle - only visible when completed
     nodeEnter.append("path")
-        .attr("d", "M-74,-2 L-72,0 L-66,-4")
-        .attr("stroke", d => getTaskState(d.data.id).done ? "#ffffff" : "#ffffff")
+        .attr("d", "M-79,-7 L-77,-5 L-71,-9")
+        .attr("stroke", d => {
+            const state = getTaskState(d.data.id);
+            const status = state.status || d.data.status || 'not-started';
+            if (status === 'completed' || state.done) return "#10b981";
+            if (status === 'in-progress') return "#f59e0b";
+            return "#ffffff";
+        })
         .attr("stroke-width", 2)
         .attr("fill", "none")
         .attr("stroke-linecap", "round")
         .attr("stroke-linejoin", "round")
-        .style("opacity", d => getTaskState(d.data.id).done ? 1 : 0.7);
+        .style("opacity", d => {
+            const state = getTaskState(d.data.id);
+            const status = state.status || d.data.status || 'not-started';
+            if (status === 'completed' || state.done) return 1;
+            if (status === 'in-progress') return 0.8;
+            return 0.5;
+        });
 
     // Node text with better positioning and wrapping
     const textGroups = nodeEnter.append('g')
@@ -567,12 +991,17 @@ function update(source) {
         let line = [];
         let lineNumber = 0;
         let tspan = textGroup.append("text")
-            .attr("x", -50)
-            .attr("y", -7)
+            .attr("x", -60)
+            .attr("y", -10)
             .attr('text-anchor', "start")
             .attr('font-size', 12)
             .attr('font-weight', 600)
-            .attr('fill', getTaskState(d.data.id).done ? "#ffffff" : "#f9fafb");
+            .attr('fill', d => {
+                const state = getTaskState(d.data.id);
+                const status = state.status || d.data.status || 'not-started';
+                if (status === 'completed' || state.done) return "#ffffff";
+                return "#f9fafb";
+            });
         
         words.forEach((word, i) => {
             line.push(word);
@@ -586,12 +1015,17 @@ function update(source) {
                 if (lineNumber < maxLines && i < words.length - 1) {
                     line = [word];
                     tspan = textGroup.append("text")
-                        .attr("x", -50)
-                        .attr("y", -7 + (lineNumber * lineHeight))
+                        .attr("x", -60)
+                        .attr("y", -10 + (lineNumber * lineHeight))
                         .attr('text-anchor', "start")
                         .attr('font-size', 12)
                         .attr('font-weight', 600)
-                        .attr('fill', getTaskState(d.data.id).done ? "#ffffff" : "#f9fafb")
+                        .attr('fill', d => {
+                            const state = getTaskState(d.data.id);
+                            const status = state.status || d.data.status || 'not-started';
+                            if (status === 'completed' || state.done) return "#ffffff";
+                            return "#f9fafb";
+                        })
                         .text(word);
                 } else if (lineNumber >= maxLines) {
                     // Truncate with ellipsis if too many lines
@@ -621,23 +1055,59 @@ function update(source) {
     nodeUpdate.select("rect")
         .transition()
         .duration(300)
-        .attr("fill", d => getTaskState(d.data.id).done ? "#10b981" : "#374151")
-        .attr("stroke", d => getTaskState(d.data.id).done ? "#10b981" : "#6b7280");
+        .attr("fill", d => {
+            const state = getTaskState(d.data.id);
+            const status = state.status || d.data.status || 'not-started';
+            if (status === 'completed' || state.done) return "#10b981";
+            if (status === 'in-progress') return "#f59e0b";
+            return "#374151";
+        })
+        .attr("stroke", d => {
+            const state = getTaskState(d.data.id);
+            const status = state.status || d.data.status || 'not-started';
+            if (status === 'completed' || state.done) return "#10b981";
+            if (status === 'in-progress') return "#f59e0b";
+            return "#6b7280";
+        });
 
     nodeUpdate.select("circle")
         .transition()
         .duration(300)
-        .attr("fill", d => getTaskState(d.data.id).done ? "#ffffff" : "#6366f1");
+        .attr("fill", d => {
+            const state = getTaskState(d.data.id);
+            const status = state.status || d.data.status || 'not-started';
+            if (status === 'completed' || state.done) return "#ffffff";
+            if (status === 'in-progress') return "#ffffff";
+            return "#6366f1";
+        });
 
     nodeUpdate.select("path")
         .transition()
         .duration(300)
-        .attr("stroke", d => getTaskState(d.data.id).done ? "#10b981" : "#ffffff");
+        .attr("stroke", d => {
+            const state = getTaskState(d.data.id);
+            const status = state.status || d.data.status || 'not-started';
+            if (status === 'completed' || state.done) return "#10b981";
+            if (status === 'in-progress') return "#f59e0b";
+            return "#ffffff";
+        })
+        .style("opacity", d => {
+            const state = getTaskState(d.data.id);
+            const status = state.status || d.data.status || 'not-started';
+            if (status === 'completed' || state.done) return 1;
+            if (status === 'in-progress') return 0.8;
+            return 0.5;
+        });
 
     nodeUpdate.selectAll(".node-text text")
         .transition()
         .duration(300)
-        .attr('fill', d => getTaskState(d.data.id).done ? "#ffffff" : "#f9fafb");
+        .attr('fill', d => {
+            const state = getTaskState(d.data.id);
+            const status = state.status || d.data.status || 'not-started';
+            if (status === 'completed' || state.done) return "#ffffff";
+            return "#f9fafb";
+        });
 
     // -------- LINKS ---------
     let link = svg.selectAll('path.link')
@@ -739,6 +1209,42 @@ function showSidebar(d) {
     let state = getTaskState(d.data.id);
     let isLeaf = !(d.children || d._children);
     
+    // Determine status display
+    const statusOptions = [
+        { value: 'not-started', label: 'Not Started', color: 'bg-gray-500' },
+        { value: 'in-progress', label: 'In Progress', color: 'bg-yellow-500' },
+        { value: 'completed', label: 'Completed', color: 'bg-green-500' }
+    ];
+    
+    const currentStatus = state.status || d.data.status || 'not-started';
+    
+    // Email details section for email-related tasks
+    const emailDetailsSection = d.data.emailDetails ? `
+        <div>
+            <div class="section-title flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                Email Details
+            </div>
+            <div class="bg-gray-800 rounded-lg p-4 space-y-3">
+                <div>
+                    <span class="text-sm font-medium text-gray-400">Subject Line:</span>
+                    <p class="text-gray-200 text-sm mt-1">${d.data.emailDetails.subject}</p>
+                </div>
+                <div>
+                    <span class="text-sm font-medium text-gray-400">Content Focus:</span>
+                    <p class="text-gray-200 text-sm mt-1">${d.data.emailDetails.content}</p>
+                </div>
+                <div>
+                    <span class="text-sm font-medium text-gray-400">Target Audience:</span>
+                    <p class="text-gray-200 text-sm mt-1">${d.data.emailDetails.audience}</p>
+                </div>
+            </div>
+        </div>
+    ` : '';
+    
     content.innerHTML = `
         <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-600">
             <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
@@ -753,15 +1259,31 @@ function showSidebar(d) {
             </div>
         </div>
         
-        <div class="mb-6">
-            <label class="custom-checkbox flex items-center gap-3 cursor-pointer">
-                <input type="checkbox" id="status-checkbox" ${state.done ? "checked" : ""}>
-                <span class="checkmark"></span>
-                <span class="text-base font-medium text-gray-200">Mark as completed</span>
-            </label>
-        </div>
-        
-        <div class="space-y-5">
+        <div class="space-y-6">
+            <div>
+                <div class="section-title">Task Status</div>
+                <select id="status-select" class="input-field">
+                    ${statusOptions.map(option => 
+                        `<option value="${option.value}" ${currentStatus === option.value ? 'selected' : ''}>${option.label}</option>`
+                    ).join('')}
+                </select>
+            </div>
+            
+            ${d.data.timeline ? `
+            <div>
+                <div class="section-title flex items-center gap-2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                    </svg>
+                    Timeline
+                </div>
+                <div class="bg-indigo-900/30 border border-indigo-600/30 rounded-lg p-3">
+                    <p class="text-indigo-200 font-medium">${d.data.timeline}</p>
+                </div>
+            </div>
+            ` : ''}
+            
             <div>
                 <div class="section-title">Description</div>
                 <p class="text-gray-200 leading-relaxed">${d.data.description || "No description provided"}</p>
@@ -771,6 +1293,8 @@ function showSidebar(d) {
                 <div class="section-title">Materials & Requirements</div>
                 <p class="text-gray-300 leading-relaxed">${d.data.materials || "No specific materials required"}</p>
             </div>
+            
+            ${emailDetailsSection}
             
             <div>
                 <div class="section-title flex items-center gap-2">
@@ -782,9 +1306,16 @@ function showSidebar(d) {
                 </div>
                 <input type="text" 
                        id="owner-input" 
-                       value="${state.owner || d.data.role || ""}"
+                       value="${state.owner || ""}"
                        class="input-field"
                        placeholder="Assign team member or role">
+            </div>
+            
+            <div>
+                <div class="section-title">Notes</div>
+                <textarea id="notes-input" 
+                         class="input-field h-20 resize-none" 
+                         placeholder="Add notes or additional details...">${state.notes || ""}</textarea>
             </div>
         </div>
         
@@ -809,13 +1340,21 @@ function showSidebar(d) {
     document.getElementById('fade-bg').classList.remove("hidden");
     
     // Event listeners
-    document.getElementById('status-checkbox').onchange = function() {
-        setTaskState(d.data.id, { done: this.checked });
+    document.getElementById('status-select').onchange = function() {
+        const status = this.value;
+        setTaskState(d.data.id, { 
+            status: status, 
+            done: status === 'completed' 
+        });
         update(d);
     };
     
     document.getElementById('owner-input').onchange = function() {
         setTaskState(d.data.id, { owner: this.value });
+    };
+    
+    document.getElementById('notes-input').onchange = function() {
+        setTaskState(d.data.id, { notes: this.value });
     };
     
     if (isLeaf && document.getElementById('delete-btn')) {
@@ -848,7 +1387,14 @@ function hideSidebar() {
 document.getElementById('fade-bg').onclick = hideSidebar;
 
 function getTaskState(id) {
-    if (!sopState[id]) sopState[id] = { done: false, owner: "" };
+    if (!sopState[id]) {
+        sopState[id] = { 
+            done: false, 
+            owner: "", 
+            status: "not-started",
+            notes: ""
+        };
+    }
     return sopState[id];
 }
 
