@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Hosting SOP - Interactive Tree</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --bg-primary: #0a0e1a;
+        --bg-secondary: #111827;
+        --bg-tertiary: #1f2937;
+        --bg-card: #374151;
+        --text-primary: #f9fafb;
+        --text-secondary: #d1d5db;
+        --text-muted: #9ca3af;
+        --accent-primary: #6366f1;
+        --accent-secondary: #8b5cf6;
+        --accent-success: #10b981;
+        --accent-warning: #f59e0b;
+        --accent-danger: #ef4444;
+        --border-primary: #4b5563;
+        --border-secondary: #6b7280;
+        --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: linear-gradient(135deg, var(--bg-primary) 0%, #0f172a 100%);
+        color: var(--text-primary);
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .header-container {
+        background: rgba(17, 24, 39, 0.8);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border-primary);
+        padding: 1.5rem 0;
+        margin-bottom: 2rem;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .logo-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-lg);
+      }
+
+      .logo-text {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #6366f1;
+        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.025em;
+      }
+
+      /* Fallback for browsers that don't support background-clip: text */
+      @supports not (-webkit-background-clip: text) {
+        .logo-text {
+          color: #6366f1 !important;
+          background: none !important;
+        }
+      }
+
+      .subtitle {
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 1rem;
+        font-weight: 500;
+      }
+
+      .tree-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 0 1rem;
+      }
+
+      .tree-container {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-primary);
+        border-radius: 1.5rem;
+        box-shadow: var(--shadow-xl);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .node-card {
+        filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+      }
+
+      .node-card:hover {
+        filter: drop-shadow(0 8px 25px rgba(99, 102, 241, 0.3));
+        transform: translateY(-2px);
+      }
+
+      .node.selected .node-card {
+        filter: drop-shadow(0 12px 35px rgba(99, 102, 241, 0.5));
+        transform: translateY(-3px);
+      }
+
+      .node.done .node-card {
+        background: var(--accent-success) !important;
+        border-color: var(--accent-success) !important;
+      }
+
+      .node.done text {
+        fill: white !important;
+      }
+
+      .sidebar {
+        animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-primary);
+        box-shadow: var(--shadow-xl);
+      }
+
+      @keyframes slideIn {
+        from { 
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to { 
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      .custom-checkbox {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .custom-checkbox input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+      }
+
+      .checkmark {
+        height: 1.25rem;
+        width: 1.25rem;
+        background: var(--bg-tertiary);
+        border: 2px solid var(--border-secondary);
+        border-radius: 0.375rem;
+        position: relative;
+        transition: all 0.2s ease;
+      }
+
+      .custom-checkbox:hover .checkmark {
+        border-color: var(--accent-primary);
+      }
+
+      .custom-checkbox input:checked ~ .checkmark {
+        background: var(--accent-success);
+        border-color: var(--accent-success);
+      }
+
+      .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+        left: 0.25rem;
+        top: 0.125rem;
+        width: 0.25rem;
+        height: 0.5rem;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+
+      .custom-checkbox input:checked ~ .checkmark:after {
+        display: block;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        color: white;
+        box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.3);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px 0 rgba(99, 102, 241, 0.4);
+      }
+
+      .btn-secondary {
+        background: var(--bg-tertiary);
+        color: var(--text-secondary);
+        border: 1px solid var(--border-primary);
+      }
+
+      .btn-secondary:hover {
+        background: var(--bg-card);
+        color: var(--text-primary);
+        border-color: var(--border-secondary);
+      }
+
+      .btn-danger {
+        background: var(--accent-danger);
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: #dc2626;
+        transform: translateY(-1px);
+      }
+
+      .input-field {
+        width: 100%;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-primary);
+        color: var(--text-primary);
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+        outline: none;
+      }
+
+      .input-field:focus {
+        border-color: var(--accent-primary);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      }
+
+      .input-field::placeholder {
+        color: var(--text-muted);
+      }
+
+      .section-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-muted);
+        margin-bottom: 0.5rem;
+      }
+
+      .fade-bg {
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(2px);
+      }
+
+      .link-path {
+        stroke: var(--border-primary);
+        stroke-width: 2;
+        fill: none;
+        opacity: 0.6;
+        transition: all 0.3s ease;
+      }
+
+      .link-path:hover {
+        stroke: var(--accent-primary);
+        opacity: 0.8;
+      }
+
+      .node-text {
+        pointer-events: none;
+        user-select: none;
+      }
+
+      @media (max-width: 768px) {
+        .tree-container {
+          width: 95vw !important;
+          height: 500px !important;
+        }
+        
+        .sidebar {
+          width: 95vw !important;
+          height: 85vh !important;
+          top: 7.5vh !important;
+          right: 2.5vw !important;
+          left: 2.5vw !important;
+          border-radius: 1rem !important;
+        }
+        
+        .logo-text {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+</head>
+<body>
+  <div class="header-container">
+    <div class="logo-container">
+      <div class="logo-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M8 12l2 2 4-4"/>
+        </svg>
+      </div>
+      <h1 class="logo-text">Event Hosting SOP</h1>
+    </div>
+    <p class="subtitle">Professional event planning workflow management</p>
+  </div>
+
+  <div class="tree-wrapper">
+    <div id="tree-container" class="tree-container" style="width: 1100px; height: 800px;">
+    </div>
+  </div>
+
+  <div id="fade-bg" class="fade-bg fixed inset-0 z-40 hidden"></div>
+  
+  <div id="sidebar" class="sidebar fixed top-4 right-4 z-50 h-[92vh] w-[450px] max-w-[95vw] rounded-2xl p-6 hidden flex-col overflow-y-auto">
+    <div id="sidebar-content"></div>
+  </div>
+
+<script>
+// --------- SOP DATA ---------
+const sopData = {
+    "name": "Event Hosting SOP",
+    "children": [
+        {
+            "name": "Event Planning",
+            "children": [
+                { "name": "Event Name", "description": "Define the event name and branding", "materials": "Brand guidelines, naming conventions", "role": "Marketing Lead" },
+                { "name": "Date & Time", "description": "Set event date, time, and duration", "materials": "Calendar, timezone considerations", "role": "Event Manager" },
+                { "name": "Format", "description": "Choose format: In-person, Hybrid, or Virtual", "materials": "Platform requirements, venue needs", "role": "Event Manager" },
+                { "name": "Speakers/Guests", "description": "Identify and confirm keynote speakers, panelists, and special guests", "materials": "Speaker database, contracts", "role": "Content Manager" },
+                { "name": "Agenda", "description": "Create detailed event agenda and timeline", "materials": "Template, timing guidelines", "role": "Content Manager" },
+                { "name": "Target Audience", "description": "Define target audience and attendee personas", "materials": "Audience research, demographics", "role": "Marketing Lead" },
+                { "name": "Expected Attendance", "description": "Estimate attendance numbers for planning", "materials": "Historical data, market analysis", "role": "Event Manager" }
+            ]
+        },
+        {
+            "name": "Marketing & Promotion",
+            "children": [
+                { "name": "Poster Design & Prep", "description": "Design event poster with QR code for registration", "materials": "Design tools, brand assets, QR generator", "role": "Design Team" },
+                { "name": "Newsletter & Social Media Content", "description": "Create newsletter and social media promotional content", "materials": "Content calendar, copy templates", "role": "Marketing Team" },
+                { "name": "Social Media Distribution", "description": "Distribute across Luma, Eventbrite, WeChat, LinkedIn", "materials": "Platform accounts, scheduling tools", "role": "Marketing Team" }
+            ]
+        },
+        {
+            "name": "Event Logistics",
+            "children": [
+                { "name": "Speaker Coordination", "description": "Confirm schedules, collect slides and speaker bios", "materials": "Speaker kit, technical requirements", "role": "Content Manager" },
+                { "name": "Calendar Invites", "description": "Send calendar invites to team members and guests", "materials": "Calendar system, contact lists", "role": "Event Coordinator" },
+                { "name": "Registration Management", "description": "Handle attendee sign-ups and confirmations", "materials": "Registration platform, CRM system", "role": "Event Coordinator" },
+                { "name": "Q&A Preparation", "description": "Curate questions and prepare Q&A format", "materials": "Question bank, moderation guidelines", "role": "Content Manager" }
+            ]
+        },
+        {
+            "name": "On-Site Preparation",
+            "children": [
+                { "name": "Materials", "description": "Prepare name tags, check-in lists, and catering arrangements", "materials": "Name tags, Check-in lists, Catering menu", "role": "Event Coordinator" },
+                { "name": "Media & Tech", "description": "Prepare slide deck, microphones, projector, and backup equipment", "materials": "Presentation deck, Microphones, Projector, Backup devices", "role": "Tech Team" }
+            ]
+        },
+        {
+            "name": "Event Execution",
+            "children": [
+                { "name": "Venue Setup", "description": "Arrange tables, signage, branding, and seating", "materials": "Furniture, signage, brand materials", "role": "Setup Team" },
+                { "name": "Check-in Station Setup", "description": "Set up attendee and speaker check-in stations", "materials": "Check-in tablets, name tags, welcome packets", "role": "Event Coordinator" },
+                { "name": "Food & Beverage Setup", "description": "Arrange food and beverage service", "materials": "Catering supplies, serving equipment", "role": "Catering Team" },
+                { "name": "Tech Setup", "description": "Configure projector, microphones, and recording equipment", "materials": "AV equipment, cables, backup devices", "role": "Tech Team" },
+                { "name": "Photo/Video Coverage", "description": "Document event with photography and videography", "materials": "Cameras, lighting, recording equipment", "role": "Media Team" },
+                { "name": "Run-of-Show Timeline", "description": "Execute detailed timeline with assigned responsibilities", "materials": "Timeline document, communication devices", "role": "Event Manager" }
+            ]
+        },
+        {
+            "name": "Post-Event",
+            "children": [
+                { "name": "Internal recap and debrief", "description": "Conduct team retrospective meeting", "materials": "Meeting notes, feedback forms", "role": "Event Manager" },
+                { "name": "Upload video to YouTube", "description": "Edit and publish event recordings", "materials": "Video files, editing software, YouTube account", "role": "Media Team" },
+                { "name": "Speaker/guest thank-you notes", "description": "Send personalized thank-you messages", "materials": "Contact information, message templates", "role": "Event Manager" },
+                { "name": "Attendee thank-you email", "description": "Send follow-up emails with resources", "materials": "Email templates, resource links", "role": "Marketing Team" },
+                { "name": "Feedback survey", "description": "Collect and analyze attendee feedback", "materials": "Survey platform, analysis tools", "role": "Event Coordinator" },
+                { "name": "Attendee vs. registration analysis", "description": "Compare actual attendance to registrations", "materials": "Registration data, attendance records", "role": "Event Coordinator" },
+                { "name": "Social media stats", "description": "Compile event reach and engagement metrics", "materials": "Analytics tools, reporting templates", "role": "Marketing Team" }
+            ]
+        }
+    ]
+};
+
+// ---- Helpers: ID assignment and state persistence ----
+function generateNodeIds(node, parentId = null) {
+    node.id = (parentId ? parentId + "." : "") + (node.name || "root").replace(/\s+/g, "_").replace(/[^a-zA-Z0-9_.]/g, "");
+    if (node.children) node.children.forEach(child => generateNodeIds(child, node.id));
+}
+generateNodeIds(sopData);
+
+function loadSOPState() {
+    let state = window.localStorage.getItem("sop_state_professional");
+    return state ? JSON.parse(state) : {};
+}
+
+function saveSOPState(state) {
+    window.localStorage.setItem("sop_state_professional", JSON.stringify(state));
+}
+
+let sopState = loadSOPState();
+
+// --- D3 rendering ---
+const treeWidth = 1060, treeHeight = 780;
+const svg = d3.select("#tree-container")
+    .append("svg")
+    .attr("width", treeWidth)
+    .attr("height", treeHeight)
+    .append("g")
+    .attr("transform", `translate(120,20)`);
+
+let duration = 500;
+let root = d3.hierarchy(sopData, d => d.children);
+
+root.x0 = treeHeight / 2;
+root.y0 = 0;
+root.children.forEach(collapse);
+
+let selectedNode = null;
+
+update(root);
+
+function collapse(d) {
+    if (d.children) {
+        d._children = d.children;
+        d._children.forEach(collapse);
+        d.children = null;
+    }
+}
+
+function update(source) {
+    const tree = d3.tree().size([treeHeight - 60, treeWidth - 300]);
+    tree(root);
+    const nodes = root.descendants();
+    const links = root.links();
+    
+    // Dynamic spacing based on tree depth and content
+    nodes.forEach(d => { d.y = d.depth * 240; });
+    
+    // Collision detection and adjustment
+    adjustForCollisions(nodes);
+    
+    let node = svg.selectAll('g.node')
+        .data(nodes, d => d.data.id);
+
+    node.exit().transition().duration(duration)
+        .attr("transform", d => `translate(${source.y},${source.x})`)
+        .style("opacity", 0)
+        .remove();
+
+    let nodeEnter = node.enter().append('g')
+        .attr('class', d => "node" +
+            (getTaskState(d.data.id).done ? " done" : "") +
+            (selectedNode && d.data.id === selectedNode.data.id ? " selected" : ""))
+        .attr("transform", d => `translate(${source.y0},${source.x0})`)
+        .style("opacity", 0)
+        .on('click', (event, d) => {
+            event.stopPropagation();
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
+                selectedNode = null;
+                hideSidebar();
+            } else if (d._children) {
+                // Check if expanding would cause severe overlapping
+                if (shouldAutoCollapse(d)) {
+                    // Collapse siblings first to make room
+                    if (d.parent) {
+                        d.parent.children.forEach(sibling => {
+                            if (sibling !== d && sibling.children) {
+                                sibling._children = sibling.children;
+                                sibling.children = null;
+                            }
+                        });
+                    }
+                }
+                d.children = d._children;
+                d._children = null;
+                selectedNode = null;
+                hideSidebar();
+            } else {
+                selectedNode = d;
+                showSidebar(d);
+            }
+            update(d);
+        });
+
+    // Node card with improved styling
+    nodeEnter.append("rect")
+        .attr("class", "node-card")
+        .attr("rx", 12)
+        .attr("ry", 12)
+        .attr("x", -90)
+        .attr("y", -25)
+        .attr("width", 180)
+        .attr("height", 50)
+        .attr("fill", d => getTaskState(d.data.id).done ? "#10b981" : "#374151")
+        .attr("stroke", d => getTaskState(d.data.id).done ? "#10b981" : "#6b7280")
+        .attr("stroke-width", 1.5);
+
+    // Task icon
+    nodeEnter.append("circle")
+        .attr("cx", -70)
+        .attr("cy", 0)
+        .attr("r", 8)
+        .attr("fill", d => getTaskState(d.data.id).done ? "#10b981" : "#6366f1");
+
+    // Check mark inside the circle
+    nodeEnter.append("path")
+        .attr("d", "M-74,-2 L-72,0 L-66,-4")
+        .attr("stroke", d => getTaskState(d.data.id).done ? "#ffffff" : "#ffffff")
+        .attr("stroke-width", 2)
+        .attr("fill", "none")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-linejoin", "round")
+        .style("opacity", d => getTaskState(d.data.id).done ? 1 : 0.7);
+
+    // Node text with better positioning and wrapping
+    const textGroups = nodeEnter.append('g')
+        .attr('class', 'node-text');
+
+    textGroups.each(function(d) {
+        const textGroup = d3.select(this);
+        const words = d.data.name.split(/\s+/);
+        const lineHeight = 14;
+        const maxWidth = 140;
+        const maxLines = 2;
+        
+        let line = [];
+        let lineNumber = 0;
+        let tspan = textGroup.append("text")
+            .attr("x", -50)
+            .attr("y", -7)
+            .attr('text-anchor', "start")
+            .attr('font-size', 12)
+            .attr('font-weight', 600)
+            .attr('fill', getTaskState(d.data.id).done ? "#ffffff" : "#f9fafb");
+        
+        words.forEach((word, i) => {
+            line.push(word);
+            tspan.text(line.join(" "));
+            
+            if (tspan.node().getComputedTextLength() > maxWidth && line.length > 1) {
+                line.pop();
+                tspan.text(line.join(" "));
+                lineNumber++;
+                
+                if (lineNumber < maxLines && i < words.length - 1) {
+                    line = [word];
+                    tspan = textGroup.append("text")
+                        .attr("x", -50)
+                        .attr("y", -7 + (lineNumber * lineHeight))
+                        .attr('text-anchor', "start")
+                        .attr('font-size', 12)
+                        .attr('font-weight', 600)
+                        .attr('fill', getTaskState(d.data.id).done ? "#ffffff" : "#f9fafb")
+                        .text(word);
+                } else if (lineNumber >= maxLines) {
+                    // Truncate with ellipsis if too many lines
+                    const currentText = tspan.text();
+                    if (currentText.length > 15) {
+                        tspan.text(currentText.substring(0, 15) + "...");
+                    }
+                    return;
+                }
+            }
+        });
+    });
+
+    let nodeUpdate = nodeEnter.merge(node);
+    
+    nodeUpdate.transition()
+        .duration(duration)
+        .attr("transform", d => `translate(${d.y},${d.x})`)
+        .style("opacity", 1);
+
+    nodeUpdate
+        .attr('class', d => "node" +
+            (getTaskState(d.data.id).done ? " done" : "") +
+            (selectedNode && d.data.id === selectedNode.data.id ? " selected" : ""));
+
+    // Update node colors based on state
+    nodeUpdate.select("rect")
+        .transition()
+        .duration(300)
+        .attr("fill", d => getTaskState(d.data.id).done ? "#10b981" : "#374151")
+        .attr("stroke", d => getTaskState(d.data.id).done ? "#10b981" : "#6b7280");
+
+    nodeUpdate.select("circle")
+        .transition()
+        .duration(300)
+        .attr("fill", d => getTaskState(d.data.id).done ? "#ffffff" : "#6366f1");
+
+    nodeUpdate.select("path")
+        .transition()
+        .duration(300)
+        .attr("stroke", d => getTaskState(d.data.id).done ? "#10b981" : "#ffffff");
+
+    nodeUpdate.selectAll(".node-text text")
+        .transition()
+        .duration(300)
+        .attr('fill', d => getTaskState(d.data.id).done ? "#ffffff" : "#f9fafb");
+
+    // -------- LINKS ---------
+    let link = svg.selectAll('path.link')
+        .data(links, d => d.target.data.id);
+    
+    link.exit().transition()
+        .duration(duration)
+        .attr('d', d => {
+            let o = { x: source.x, y: source.y };
+            return diagonal({ source: o, target: o });
+        })
+        .style("opacity", 0)
+        .remove();
+    
+    link.enter().insert('path', "g")
+        .attr('class', 'link link-path')
+        .attr('d', d => {
+            let o = { x: source.x0, y: source.y0 };
+            return diagonal({ source: o, target: o });
+        })
+        .style("opacity", 0)
+        .merge(link)
+        .transition()
+        .duration(duration)
+        .attr('d', diagonal)
+        .style("opacity", 0.6);
+    
+    nodes.forEach(d => {
+        d.x0 = d.x;
+        d.y0 = d.y;
+    });
+}
+
+function diagonal(d) {
+    return `M${d.source.y},${d.source.x}C${d.source.y + 60},${d.source.x} ${d.target.y - 60},${d.target.x} ${d.target.y},${d.target.x}`;
+}
+
+// Collision detection and node spacing adjustment
+function adjustForCollisions(nodes) {
+    const NODE_HEIGHT = 60; // Node height including padding
+    const MIN_SPACING = 10; // Minimum spacing between nodes
+    
+    // Group nodes by depth level
+    const nodesByLevel = d3.group(nodes, d => d.depth);
+    
+    nodesByLevel.forEach((levelNodes, depth) => {
+        if (levelNodes.length <= 1) return;
+        
+        // Sort nodes by their current x position
+        levelNodes.sort((a, b) => a.x - b.x);
+        
+        // Adjust positions to prevent overlaps
+        for (let i = 1; i < levelNodes.length; i++) {
+            const currentNode = levelNodes[i];
+            const prevNode = levelNodes[i - 1];
+            
+            const minDistance = NODE_HEIGHT + MIN_SPACING;
+            const currentDistance = currentNode.x - prevNode.x;
+            
+            if (currentDistance < minDistance) {
+                const adjustment = minDistance - currentDistance;
+                // Adjust current node and all subsequent nodes
+                for (let j = i; j < levelNodes.length; j++) {
+                    levelNodes[j].x += adjustment;
+                }
+            }
+        }
+    });
+}
+
+// Auto-collapse nodes if expansion would cause severe overlapping
+function shouldAutoCollapse(node) {
+    if (!node.children || node.children.length === 0) return false;
+    
+    // Calculate how many nodes would be visible if expanded
+    const visibleDescendants = countVisibleDescendants(node);
+    const availableHeight = treeHeight - 80; // Reserve space for padding
+    const requiredHeight = visibleDescendants * 70; // Estimated height per node
+    
+    return requiredHeight > availableHeight;
+}
+
+function countVisibleDescendants(node) {
+    if (!node.children) return 0;
+    
+    let count = node.children.length;
+    node.children.forEach(child => {
+        if (child.children) {
+            count += countVisibleDescendants(child);
+        }
+    });
+    return count;
+}
+
+// ---- Sidebar with improved design ----
+function showSidebar(d) {
+    const sidebar = document.getElementById('sidebar');
+    const content = document.getElementById('sidebar-content');
+    let state = getTaskState(d.data.id);
+    let isLeaf = !(d.children || d._children);
+    
+    content.innerHTML = `
+        <div class="flex items-center gap-3 mb-6 pb-4 border-b border-gray-600">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M8 12l2 2 4-4"/>
+                </svg>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-white">${d.data.name}</h2>
+                <p class="text-sm text-gray-400">Task Details</p>
+            </div>
+        </div>
+        
+        <div class="mb-6">
+            <label class="custom-checkbox flex items-center gap-3 cursor-pointer">
+                <input type="checkbox" id="status-checkbox" ${state.done ? "checked" : ""}>
+                <span class="checkmark"></span>
+                <span class="text-base font-medium text-gray-200">Mark as completed</span>
+            </label>
+        </div>
+        
+        <div class="space-y-5">
+            <div>
+                <div class="section-title">Description</div>
+                <p class="text-gray-200 leading-relaxed">${d.data.description || "No description provided"}</p>
+            </div>
+            
+            <div>
+                <div class="section-title">Materials & Requirements</div>
+                <p class="text-gray-300 leading-relaxed">${d.data.materials || "No specific materials required"}</p>
+            </div>
+            
+            <div>
+                <div class="section-title flex items-center gap-2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    Assigned Owner
+                </div>
+                <input type="text" 
+                       id="owner-input" 
+                       value="${state.owner || d.data.role || ""}"
+                       class="input-field"
+                       placeholder="Assign team member or role">
+            </div>
+        </div>
+        
+        <div class="flex gap-3 mt-8 pt-6 border-t border-gray-600">
+            ${d.parent ? `<button class="btn btn-secondary flex-1" id="parent-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Go to Parent
+            </button>` : ""}
+            ${isLeaf ? `<button class="btn btn-danger" id="delete-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                </svg>
+                Delete
+            </button>` : ""}
+        </div>
+    `;
+    
+    sidebar.classList.remove("hidden");
+    sidebar.classList.add("flex");
+    document.getElementById('fade-bg').classList.remove("hidden");
+    
+    // Event listeners
+    document.getElementById('status-checkbox').onchange = function() {
+        setTaskState(d.data.id, { done: this.checked });
+        update(d);
+    };
+    
+    document.getElementById('owner-input').onchange = function() {
+        setTaskState(d.data.id, { owner: this.value });
+    };
+    
+    if (isLeaf && document.getElementById('delete-btn')) {
+        document.getElementById('delete-btn').onclick = function() {
+            if (confirm('Are you sure you want to delete this task?')) {
+                deleteLeafNode(d);
+                hideSidebar();
+            }
+        };
+    }
+    
+    if (d.parent && document.getElementById('parent-btn')) {
+        document.getElementById('parent-btn').onclick = function() {
+            selectedNode = d.parent;
+            showSidebar(d.parent);
+            update(d.parent);
+        }
+    }
+}
+
+function hideSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.add("hidden");
+    sidebar.classList.remove("flex");
+    document.getElementById('fade-bg').classList.add("hidden");
+    selectedNode = null;
+    update(root);
+}
+
+document.getElementById('fade-bg').onclick = hideSidebar;
+
+function getTaskState(id) {
+    if (!sopState[id]) sopState[id] = { done: false, owner: "" };
+    return sopState[id];
+}
+
+function setTaskState(id, changes) {
+    sopState[id] = Object.assign({}, getTaskState(id), changes);
+    saveSOPState(sopState);
+}
+
+function deleteLeafNode(d) {
+    if (!d.parent) return;
+    let idx = d.parent.data.children.findIndex(child => child.id === d.data.id);
+    if (idx > -1) d.parent.data.children.splice(idx, 1);
+    update(d.parent);
+}
+
+// Close sidebar with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        hideSidebar();
+    }
+});
+
+// Responsive handling
+window.addEventListener('resize', function() {
+    const container = document.getElementById('tree-container');
+    if (window.innerWidth < 768) {
+        container.style.width = '95vw';
+        container.style.height = '500px';
+    } else {
+        container.style.width = '1100px';
+        container.style.height = '800px';
+    }
+});
+
+window.onload = function() {
+    document.getElementById('tree-container').scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'center', 
+        inline: 'center' 
+    });
+};
+</script>
+</body>
+</html>
