@@ -496,6 +496,191 @@
           animation: none;
         }
       }
+
+      /* Enhanced hierarchical coloring for parent-child relationships */
+      .node.depth-0 .node-card {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+        border-color: #6366f1 !important;
+        box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4) !important;
+      }
+
+      .node.depth-1 .node-card {
+        background: linear-gradient(135deg, #3b82f6, #06b6d4) !important;
+        border-color: #3b82f6 !important;
+        box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3) !important;
+      }
+
+      .node.depth-2 .node-card {
+        background: linear-gradient(135deg, #10b981, #34d399) !important;
+        border-color: #10b981 !important;
+        box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3) !important;
+      }
+
+      .node.depth-3 .node-card {
+        background: linear-gradient(135deg, #f59e0b, #fbbf24) !important;
+        border-color: #f59e0b !important;
+        box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3) !important;
+      }
+
+      .node.depth-4 .node-card {
+        background: linear-gradient(135deg, #ef4444, #f87171) !important;
+        border-color: #ef4444 !important;
+        box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3) !important;
+      }
+
+      /* Enhanced hover effects with depth awareness */
+      .node.depth-0:hover .node-card {
+        filter: drop-shadow(0 8px 30px rgba(99, 102, 241, 0.6));
+        transform: translateY(-3px) scale(1.02);
+      }
+
+      .node.depth-1:hover .node-card {
+        filter: drop-shadow(0 8px 30px rgba(59, 130, 246, 0.5));
+        transform: translateY(-3px) scale(1.02);
+      }
+
+      .node.depth-2:hover .node-card {
+        filter: drop-shadow(0 8px 30px rgba(16, 185, 129, 0.5));
+        transform: translateY(-3px) scale(1.02);
+      }
+
+      .node.depth-3:hover .node-card {
+        filter: drop-shadow(0 8px 30px rgba(245, 158, 11, 0.5));
+        transform: translateY(-3px) scale(1.02);
+      }
+
+      .node.depth-4:hover .node-card {
+        filter: drop-shadow(0 8px 30px rgba(239, 68, 68, 0.5));
+        transform: translateY(-3px) scale(1.02);
+      }
+
+      /* Hierarchical link coloring */
+      .link-depth-0 {
+        stroke: #6366f1 !important;
+        stroke-width: 3px !important;
+        opacity: 0.8 !important;
+      }
+
+      .link-depth-1 {
+        stroke: #3b82f6 !important;
+        stroke-width: 2.5px !important;
+        opacity: 0.7 !important;
+      }
+
+      .link-depth-2 {
+        stroke: #10b981 !important;
+        stroke-width: 2px !important;
+        opacity: 0.6 !important;
+      }
+
+      .link-depth-3 {
+        stroke: #f59e0b !important;
+        stroke-width: 2px !important;
+        opacity: 0.6 !important;
+      }
+
+      .link-depth-4 {
+        stroke: #ef4444 !important;
+        stroke-width: 2px !important;
+        opacity: 0.6 !important;
+      }
+
+      /* Status override colors - these take precedence when tasks are completed/in-progress */
+      .node.done .node-card {
+        background: linear-gradient(135deg, #10b981, #34d399) !important;
+        border-color: #10b981 !important;
+        box-shadow: 0 4px 20px rgba(16, 185, 129, 0.5) !important;
+      }
+
+      .node.in-progress .node-card {
+        background: linear-gradient(135deg, #f59e0b, #fbbf24) !important;
+        border-color: #f59e0b !important;
+        box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4) !important;
+      }
+
+      /* Enhanced selection highlighting */
+      .node.selected .node-card {
+        filter: drop-shadow(0 12px 40px rgba(99, 102, 241, 0.7)) !important;
+        transform: translateY(-4px) scale(1.05) !important;
+        border: 2px solid #ffffff !important;
+      }
+
+      /* Collapse/expand indicator styling */
+      .node.has-children .node-card {
+        border-left: 4px solid rgba(255, 255, 255, 0.3);
+        position: relative;
+      }
+
+      .node.collapsed .node-card {
+        border-left: 4px solid rgba(255, 255, 255, 0.6);
+        opacity: 0.9;
+      }
+
+      .node.collapsed .node-card::after {
+        content: '+';
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        pointer-events: none;
+      }
+
+      .node.expanded .node-card::after {
+        content: '−';
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        pointer-events: none;
+      }
+
+      /* Color Legend Responsive Styling */
+      .color-legend {
+        transition: transform 0.3s ease;
+      }
+
+      .color-legend:hover {
+        transform: translateY(-2px);
+      }
+
+      @media (max-width: 768px) {
+        .color-legend {
+          top: 60px !important;
+          left: 10px !important;
+          max-width: 200px !important;
+          font-size: 11px !important;
+        }
+
+        .color-legend h3 {
+          font-size: 12px !important;
+          margin-bottom: 8px !important;
+        }
+
+        .color-legend .space-y-2 {
+          gap: 4px !important;
+        }
+
+        .color-legend .w-4 {
+          width: 12px !important;
+          height: 12px !important;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .color-legend {
+          top: 50px !important;
+          left: 5px !important;
+          right: 5px !important;
+          max-width: none !important;
+          padding: 12px !important;
+        }
+      }
     </style>
 </head>
 <body>
@@ -514,6 +699,49 @@
 
   <div class="tree-wrapper">
     <div id="tree-container" class="tree-container" style="width: 1100px; height: 800px;">
+    </div>
+    
+    <!-- Hierarchical Color Legend -->
+    <div class="color-legend fixed top-4 left-4 z-40 bg-gray-800/90 backdrop-blur-sm border border-gray-600 rounded-xl p-4 max-w-xs">
+      <h3 class="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M8 12l2 2 4-4"/>
+        </svg>
+        Hierarchy Colors
+      </h3>
+      <div class="space-y-2 text-xs">
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-gradient-to-r from-indigo-500 to-purple-600"></div>
+          <span class="text-gray-200">Root Level</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-gradient-to-r from-blue-500 to-cyan-500"></div>
+          <span class="text-gray-200">Main Categories</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-gradient-to-r from-green-500 to-emerald-400"></div>
+          <span class="text-gray-200">Sub-tasks</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-gradient-to-r from-yellow-500 to-yellow-400"></div>
+          <span class="text-gray-200">Detail Items</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="w-4 h-4 rounded bg-gradient-to-r from-red-500 to-red-400"></div>
+          <span class="text-gray-200">Nested Items</span>
+        </div>
+        <div class="border-t border-gray-600 pt-2 mt-3">
+          <div class="flex items-center gap-2">
+            <div class="w-4 h-4 rounded bg-green-500"></div>
+            <span class="text-gray-200">Completed</span>
+          </div>
+          <div class="flex items-center gap-2 mt-1">
+            <div class="w-4 h-4 rounded bg-yellow-500"></div>
+            <span class="text-gray-200">In Progress</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1212,9 +1440,15 @@ function update(source) {
         .remove();
 
     let nodeEnter = node.enter().append('g')
-        .attr('class', d => "node" +
-            (getTaskState(d.data.id).done ? " done" : "") +
-            (selectedNode && d.data.id === selectedNode.data.id ? " selected" : ""))
+        .attr('class', d => {
+            let classes = `node depth-${d.depth}`;
+            if (getTaskState(d.data.id).done) classes += " done";
+            if (getTaskState(d.data.id).status === 'in-progress') classes += " in-progress";
+            if (selectedNode && d.data.id === selectedNode.data.id) classes += " selected";
+            if (d.children) classes += " expanded has-children";
+            else if (d._children) classes += " collapsed has-children";
+            return classes;
+        })
         .attr("transform", d => `translate(${source.y0},${source.x0})`)
         .style("opacity", 0)
         .on('click', (event, d) => {
@@ -1253,7 +1487,7 @@ function update(source) {
     const fontSize = isMobile ? 11 : 12;
     const iconSize = isMobile ? 6 : 8;
 
-    // Node card with responsive sizing
+    // Node card with responsive sizing and hierarchical coloring
     nodeEnter.append("rect")
         .attr("class", "node-card")
         .attr("rx", isMobile ? 8 : 12)
@@ -1262,23 +1496,9 @@ function update(source) {
         .attr("y", -nodeHeight/2)
         .attr("width", nodeWidth)
         .attr("height", nodeHeight)
-        .attr("fill", d => {
-            const state = getTaskState(d.data.id);
-            const status = state.status || d.data.status || 'not-started';
-            if (status === 'completed' || state.done) return "#10b981";
-            if (status === 'in-progress') return "#f59e0b";
-            return "#374151";
-        })
-        .attr("stroke", d => {
-            const state = getTaskState(d.data.id);
-            const status = state.status || d.data.status || 'not-started';
-            if (status === 'completed' || state.done) return "#10b981";
-            if (status === 'in-progress') return "#f59e0b";
-            return "#6b7280";
-        })
-        .attr("stroke-width", 1.5);
+        .style("position", "relative"); // Enable pseudo-elements for expand/collapse indicators
 
-    // Responsive task icon positioning
+    // Responsive task icon positioning with hierarchical color awareness
     const iconX = -nodeWidth/2 + 15;
     const iconY = isMobile ? -2 : -5;
     
@@ -1286,24 +1506,20 @@ function update(source) {
         .attr("cx", iconX)
         .attr("cy", iconY)
         .attr("r", iconSize)
-        .attr("fill", d => {
-            const state = getTaskState(d.data.id);
-            const status = state.status || d.data.status || 'not-started';
-            if (status === 'completed' || state.done) return "#ffffff";
-            if (status === 'in-progress') return "#ffffff";
-            return "#6366f1";
-        });
+        .attr("fill", "rgba(255, 255, 255, 0.9)")
+        .attr("stroke", "rgba(255, 255, 255, 0.3)")
+        .attr("stroke-width", 1);
 
-    // Responsive check mark positioning
+    // Enhanced check mark with better visibility
     const checkSize = isMobile ? 1.5 : 2;
     nodeEnter.append("path")
-        .attr("d", `M${iconX-4},${iconY-2} L${iconX-2},${iconY} L${iconX+2},${iconY-4}`)
+        .attr("d", `M${iconX-3},${iconY-1} L${iconX-1},${iconY+1} L${iconX+3},${iconY-3}`)
         .attr("stroke", d => {
             const state = getTaskState(d.data.id);
             const status = state.status || d.data.status || 'not-started';
             if (status === 'completed' || state.done) return "#10b981";
             if (status === 'in-progress') return "#f59e0b";
-            return "#ffffff";
+            return "rgba(99, 102, 241, 0.8)";
         })
         .attr("stroke-width", checkSize)
         .attr("fill", "none")
@@ -1314,7 +1530,7 @@ function update(source) {
             const status = state.status || d.data.status || 'not-started';
             if (status === 'completed' || state.done) return 1;
             if (status === 'in-progress') return 0.8;
-            return 0.5;
+            return 0.6;
         });
 
     // Responsive node text
@@ -1337,12 +1553,8 @@ function update(source) {
             .attr('text-anchor', "start")
             .attr('font-size', fontSize)
             .attr('font-weight', 600)
-            .attr('fill', d => {
-                const state = getTaskState(d.data.id);
-                const status = state.status || d.data.status || 'not-started';
-                if (status === 'completed' || state.done) return "#ffffff";
-                return "#f9fafb";
-            });
+            .attr('fill', "rgba(255, 255, 255, 0.95)")
+            .style("text-shadow", "0 1px 2px rgba(0, 0, 0, 0.5)") // Enhanced readability
         
         words.forEach((word, i) => {
             line.push(word);
@@ -1388,9 +1600,15 @@ function update(source) {
         .style("opacity", 1);
 
     nodeUpdate
-        .attr('class', d => "node" +
-            (getTaskState(d.data.id).done ? " done" : "") +
-            (selectedNode && d.data.id === selectedNode.data.id ? " selected" : ""));
+        .attr('class', d => {
+            let classes = `node depth-${d.depth}`;
+            if (getTaskState(d.data.id).done) classes += " done";
+            if (getTaskState(d.data.id).status === 'in-progress') classes += " in-progress";
+            if (selectedNode && d.data.id === selectedNode.data.id) classes += " selected";
+            if (d.children) classes += " expanded has-children";
+            else if (d._children) classes += " collapsed has-children";
+            return classes;
+        });
 
     // Update node colors based on state
     nodeUpdate.select("rect")
@@ -1450,7 +1668,7 @@ function update(source) {
             return "#f9fafb";
         });
 
-    // -------- LINKS with responsive styling ---------
+    // -------- LINKS with hierarchical coloring ---------
     let link = svg.selectAll('path.link')
         .data(links, d => d.target.data.id);
     
@@ -1464,20 +1682,18 @@ function update(source) {
         .remove();
     
     link.enter().insert('path', "g")
-        .attr('class', 'link link-path')
+        .attr('class', d => `link link-path link-depth-${d.target.depth - 1}`)
         .attr('d', d => {
             let o = { x: source.x0, y: source.y0 };
             return diagonal({ source: o, target: o });
         })
         .style("opacity", 0)
-        .style("stroke", "#6b7280")
-        .style("stroke-width", isMobile ? "1.5px" : "2px")
         .style("fill", "none")
         .merge(link)
         .transition()
         .duration(duration)
         .attr('d', diagonal)
-        .style("opacity", 0.6);
+        .attr('class', d => `link link-path link-depth-${d.target.depth - 1}`); // Apply depth class for coloring
     
     nodes.forEach(d => {
         d.x0 = d.x;
